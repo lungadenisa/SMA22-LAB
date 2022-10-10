@@ -4,10 +4,14 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,12 +28,18 @@ public class MainActivity extends AppCompatActivity {
         EditText eName = (EditText) findViewById(R.id.eName);
         Button bClick = (Button) findViewById(R.id.bClick);
         TextView tName = (TextView) findViewById(R.id.tName);
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        bClick.setOnClickListener(new View.OnClickListener(){
+        Spinner spinner = (Spinner) findViewById(R.id.spinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.colors, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+
+        bClick.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v){
-                String afisare= "Hello, " + eName.getText() + "!"; //luam un string in care stocam ce vrem sa afisam.
+            public void onClick(View v) {
+                String afisare = "Hello, " + eName.getText() + "!"; //luam un string in care stocam ce vrem sa afisam.
                 tName.setText(afisare); //afisarea stringului
                 builder.setMessage(afisare); //setam mesajul pentru popup-window
                 builder.setCancelable(true);
@@ -37,17 +47,52 @@ public class MainActivity extends AppCompatActivity {
                 builder.setPositiveButton(":)", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        Toast.makeText(MainActivity.this,"Have a nice day", Toast.LENGTH_SHORT).show();//afisarea mesajului cu ajutorul metodei Toast, length short reprezinta durata perioadei in care este afisat mesajul.
+                        Toast.makeText(MainActivity.this, "Have a nice day", Toast.LENGTH_SHORT).show();//afisarea mesajului cu ajutorul metodei Toast, length short reprezinta durata perioadei in care este afisat mesajul.
                     }
                 }); // cream un buton pentru situatia pozitiva
                 builder.setNegativeButton(":(", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        Toast.makeText(MainActivity.this,"Be happy ", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "Be happy ", Toast.LENGTH_SHORT).show();
                     }
                 }); // cream un buton pentru situatia negativa
                 AlertDialog alert = builder.create(); //declaram o alerta
                 alert.show();//afisarea alertei
+            }
+        });
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String colour = spinner.getItemAtPosition(i).toString();
+                switch (colour) {
+                    case "Pink":
+                        bClick.setBackgroundColor(Color.rgb(255, 0, 193));
+                        break;
+                    case "Blue":
+                        bClick.setBackgroundColor(Color.rgb(0,58,255));
+                        break;
+                    case "Green":
+                        bClick.setBackgroundColor(Color.rgb(37,197,108));
+                        break;
+                    case "Black":
+                        bClick.setBackgroundColor(Color.rgb(0,0,0));
+                        break;
+                    case "White":
+                        bClick.setBackgroundColor(Color.rgb(255,255,255));
+                        break;
+                    case "Orange":
+                        bClick.setBackgroundColor(Color.rgb(255,173,0));
+                        break;
+                    case "Red":
+                        bClick.setBackgroundColor(Color.rgb(255, 0, 0));
+                        break;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
             }
         });
     }
