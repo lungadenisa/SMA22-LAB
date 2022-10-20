@@ -4,7 +4,9 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -14,6 +16,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class MainActivity extends AppCompatActivity {
     private EditText eName;
@@ -28,7 +32,8 @@ public class MainActivity extends AppCompatActivity {
         EditText eName = (EditText) findViewById(R.id.eName);
         Button bClick = (Button) findViewById(R.id.bClick);
         TextView tName = (TextView) findViewById(R.id.tName);
-
+        FloatingActionButton buttonShare = (FloatingActionButton) findViewById(R.id.shareButton);
+        FloatingActionButton buttonSearch = (FloatingActionButton) findViewById(R.id.searchButton);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         Spinner spinner = (Spinner) findViewById(R.id.spinner);
@@ -61,6 +66,27 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        buttonShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                shareIntent.setType("text/plain");
+                String name = tName.getText().toString();
+                shareIntent.putExtra(Intent.EXTRA_TEXT, name);
+                startActivity(Intent.createChooser(shareIntent, "Share using: "));
+            }
+        });
+
+        buttonSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent searchIntent = new Intent(Intent.ACTION_VIEW);
+                String text = tName.getText().toString();
+                String url = "https://www.google.ro/search?q=" + text;
+                searchIntent.setDataAndType(Uri.parse(url), "text/plain");
+                startActivity(searchIntent);
+            }
+        });
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
